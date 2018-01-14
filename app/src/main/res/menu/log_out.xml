@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/log_out_btn"
+        android:enabled="true"
+        android:orderInCategory="99999"
+        android:title="@string/log_out_btn"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/change_name_btn"
+        android:enabled="true"
+        android:orderInCategory="2"
+        android:title="@string/change_name_btn"
+        app:showAsAction="never"
+        />
+</menu>

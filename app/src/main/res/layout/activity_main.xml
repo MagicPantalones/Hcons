@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#303030"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="16dp">
+
+    <include
+        android:id="@+id/factBox"
+        layout="@layout/activity_fact_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/transition_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <ImageView
+            tools:ignore="ContentDescription"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#212121"
+            android:layout_alignTop="@+id/et_new_fact"
+            android:layout_alignStart="@+id/et_new_fact"
+            android:layout_alignBottom="@+id/et_new_fact"
+            android:layout_alignEnd="@+id/et_new_fact"
+            />
+        <EditText
+            android:id="@+id/et_new_fact"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:hint="@string/new_fact_et_hint"
+            android:inputType="textAutoCorrect|textCapSentences|textAutoComplete|textMultiLine"
+            android:imeOptions="normal"
+            android:maxLength="400"
+            android:maxLines="8"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/btn_new_fact"
+            android:layout_alignParentBottom="true"
+            android:textColor="@android:color/primary_text_dark"
+            android:textColorHint="@android:color/secondary_text_dark"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_new_fact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:elevation="6dp"
+            app:pressedTranslationZ="12dp" />
+
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

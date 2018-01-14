@@ -1,0 +1,19 @@
+<resources>
+    <!--
+    Content description strings
+    -->
+    <string name="daily_fact_header_description">Daily Facts Header</string>
+    <string name="weekly_fact_header_description">Weekly Fact Header</string>
+    <string name="profile_picture_description">Profile Picture</string>
+    <string name="logo_description">Magics! Logo</string>
+    <string name="loading_picture_description">Loading#8230#8230#8230</string>
+    <string name="app_name_description">Hcon\'s App</string>
+
+    <string name="app_name">H-Cons App</string>
+
+    <string name="new_fact_et_hint">Write A New Hcon Fact</string>
+
+    <string name="log_out_btn">log out</string>
+    <string name="change_name_btn">Change Username</string>
+
+</resources>

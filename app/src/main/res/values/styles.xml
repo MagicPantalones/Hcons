@@ -1,0 +1,19 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#212121</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="ActionBar.Solid.Hcon.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="displayOptions">useLogo|showHome</item>
+        <item name="android:logo">@drawable/background_daily_facts</item>
+    </style>
+    <style name="AppTheme.Actionbar.Logo" parent="@style/AppTheme">
+        <item name="actionBarStyle">@style/ActionBar.Solid.Hcon.NoTitle</item>
+    </style>
+
+</resources>
