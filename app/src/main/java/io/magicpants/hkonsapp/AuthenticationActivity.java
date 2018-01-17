@@ -10,27 +10,25 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class AuthenticationActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 42;
-    FirebaseAuth mAuth;
-    FirebaseUser mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-            startActivityForResult(
-                    AuthUI.getInstance().createSignInIntentBuilder()
-                            .setAllowNewEmailAccounts(false)
-                            .setIsSmartLockEnabled(false)
-                            .setLogo(R.drawable.app_name_header)
-                            .setTheme(R.style.AppTheme)
-                            .build(),
+
+        startActivityForResult(
+                AuthUI.getInstance().createSignInIntentBuilder()
+                        .setAllowNewEmailAccounts(false)
+                        .setIsSmartLockEnabled(false)
+                        .setLogo(R.drawable.app_name_header)
+                        .setTheme(R.style.AppTheme)
+                        .build(),
                     RC_SIGN_IN);
     }
 
@@ -38,9 +36,13 @@ public class AuthenticationActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
         if (requestCode == RC_SIGN_IN){
             IdpResponse response = IdpResponse.fromResultIntent(data);
+
             if (resultCode == RESULT_OK){
+                //TODO Remove or move to sign-in activity.
+                exportOnLogin();
                 makeToast("Success!");
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
@@ -67,4 +69,19 @@ public class AuthenticationActivity extends AppCompatActivity {
     private void makeToast(String message){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+
+    //TODO Remove or migrate to sign-in completion.
+    private void exportOnLogin(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = mAuth.getCurrentUser();
+        String uid = mUser.getUid();
+        String mail = mUser.getEmail();
+        String userName = mUser.getDisplayName();
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("users");
+
+        dbRef.child(uid).child("mailaddress").setValue(mail);
+        dbRef.child(uid).child("username").setValue(userName);
+
+    }
+
 }

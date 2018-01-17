@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -100,18 +98,22 @@ public class MainActivity extends AppCompatActivity {
 
         mUser = mAuth.getCurrentUser();
 
-        if (!TextUtils.isEmpty(mUser.getDisplayName())){
-            userName = mUser.getDisplayName();
-        } else {
-            showDialog();
-        }
-
+        userName = (mUser.getDisplayName() == null) ? mUser.getEmail() : mUser.getDisplayName();
         eMail = mUser.getEmail();
         profilePicture = mUser.getPhotoUrl();
         uid = mUser.getUid();
 
+        mUserRef = mUserRef.child(uid);
+        //TODO temp function while i'm creating user accounts manually
+        if (userName.equals(eMail)){
+            Toast.makeText(this, "Username can't be same as Email, please change", Toast.LENGTH_LONG).show();
+            showChangeUsernameDialog();
+        }
+
         Query query = mFactRef.orderByKey().limitToLast(100);
 
+        /* This creates the adapter, viewholder and populates the recycler view.
+         */
         FirebaseRecyclerOptions<Facts> options = new FirebaseRecyclerOptions.Builder<Facts>()
                 .setQuery(query, Facts.class)
                 .build();
@@ -156,7 +158,11 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
 
-
+        /* On click listener for the floating action button. If the editText area is hidden this will open the keyboard + show the editText
+         * If the editText area is visible it will write to the DB.
+         * Else if you hide the EditText before you write to the DB, in other words, press back, it will open with the text that you
+         * wrote before you hid the edit-text
+        */
         fab.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -176,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //TODO Implement lifecycle changes, local DB, savedinstancestate bundle, etc.
     @Override
     protected void onStart() {
         super.onStart();
@@ -192,17 +199,20 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    //Method to write new "facts" to the DB
     public Boolean createFact(String content, String userName) {
-        if (TextUtils.isEmpty(userName)){
-            showDialog();
-            return false;
-        } else {
-            Facts newFact = new Facts(content, userName, formatDateForDataBase());
-            mFactRef.push().setValue(newFact);
-            return true;
-        }
+        String timeNow = formatDateForDataBase();
+        Facts newFact = new Facts(content, userName, timeNow);
+        String pNewFactKey = mFactRef.push().getKey();
+        UserPosts userPosts = new UserPosts(content, timeNow);
+
+        mUserRef.child("userposts").child(pNewFactKey).setValue(userPosts);
+        mFactRef.child(pNewFactKey).setValue(newFact);
+
+        return true;
     }
 
+    //Util method for opening or hiding the soft input keyboard
     public void showHideKeyboard(Boolean show, Context context, View v) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         if ((show) && (v != null)) {
@@ -214,17 +224,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void showDialog() {
+    //Shows the fragment to change usernames
+    void showChangeUsernameDialog() {
         DialogFragment newFrag = UsernameDialogPrompt.newInstance("New display name.");
         newFrag.show(getFragmentManager(), "new user dialog.");
     }
 
+    //Gets called on click from the fragment class.
     void updateUsername(String newname){
-        if (TextUtils.isEmpty(newname)){
-            Toast.makeText(this, "No username added, try again", Toast.LENGTH_LONG).show();
-            showDialog();
+        if (TextUtils.isEmpty(newname) || newname.equals(eMail)){
+            Toast.makeText(this, "Illegal username, try again", Toast.LENGTH_LONG).show();
+            showChangeUsernameDialog();
             return;
         }
+
         UserProfileChangeRequest newUserName = new UserProfileChangeRequest.Builder()
                 .setDisplayName(newname)
                 .build();
@@ -233,12 +246,14 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     userName = mUser.getDisplayName();
+                    mUserRef.child("username").setValue(userName);
                     Toast.makeText(MainActivity.this, "Username added", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
+    //Initiates the top right option menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -246,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //The onclick handler for the option buttons
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -262,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                 return true;
             case R.id.change_name_btn:
-                showDialog();
+                showChangeUsernameDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
