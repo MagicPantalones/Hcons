@@ -11,13 +11,13 @@ public class UserPosts {
 
     public UserPosts(){}
 
-    UserPosts(String fact, String timeStamp){
+    UserPosts(String fact, String timestamp){
         this.fact = fact;
-        this.timestamp = timeStamp;
+        this.timestamp = timestamp;
     }
 
     void setFact(String fact){this.fact = fact;}
     String getFact(){return fact;}
-    void setTimeStamp(String timeStamp){this.timestamp = timeStamp;}
-    String getTimeStamp(){return timestamp;}
+    void setTimestamp(String timeStamp){this.timestamp = timestamp;}
+    String getTimestamp(){return timestamp;}
 }

@@ -79,7 +79,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         String userName = mUser.getDisplayName();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("users");
 
-        dbRef.child(uid).child("mailaddress").setValue(mail);
+        dbRef.child(uid).child("emailaddress").setValue(mail);
         dbRef.child(uid).child("username").setValue(userName);
 
     }
