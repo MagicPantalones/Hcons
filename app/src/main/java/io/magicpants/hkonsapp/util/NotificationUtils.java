@@ -1,4 +1,4 @@
-package io.magicpants.hkonsapp;
+package io.magicpants.hkonsapp.util;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import io.magicpants.hkonsapp.MainActivity;
+import io.magicpants.hkonsapp.R;
 
 /**
  * Created by Erik on 10.01.2018.

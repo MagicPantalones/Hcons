@@ -15,15 +15,13 @@ public class Facts {
     public String content;
     public String creator;
     public String timestamp;
-    public String resurl;
 
     public Facts(){}
 
-    Facts(String content, String creator, String timestamp, @Nullable String resurl){
+    Facts(String content, String creator, String timestamp){
         this.content = content;
         this.creator = creator;
         this.timestamp = timestamp;
-        this.resurl = resurl;
     }
 
     void setContent(String text){this.content = text;}
@@ -32,6 +30,4 @@ public class Facts {
     String getCreator(){return creator;}
     void setTimestamp(String timestamp){this.timestamp = timestamp;}
     String getTimestamp(){return timestamp;}
-    void setResurl(String resurl){this.resurl = resurl;}
-    String getResurl(){return resurl;}
 }

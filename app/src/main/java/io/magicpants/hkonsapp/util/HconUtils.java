@@ -1,4 +1,4 @@
-package io.magicpants.hkonsapp;
+package io.magicpants.hkonsapp.util;
 
 
 import java.text.SimpleDateFormat;

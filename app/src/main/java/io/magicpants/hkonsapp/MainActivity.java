@@ -46,8 +46,8 @@ import com.google.firebase.database.Query;
 
 
 
-import static io.magicpants.hkonsapp.HconUtils.formatDateForDataBase;
-import static io.magicpants.hkonsapp.HconUtils.normalizeMetricDate;
+import static io.magicpants.hkonsapp.util.HconUtils.formatDateForDataBase;
+import static io.magicpants.hkonsapp.util.HconUtils.normalizeMetricDate;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 etNewFact.setVisibility(visible ? View.VISIBLE : View.GONE);
                 fab.setImageResource(visible ? R.drawable.avd_anim_dark : R.drawable.avd_anim_dark_reverse);
                 if (!etNewFact.getText().toString().equals("") && (!visible)) {
-                    etNewFact.setText(createFact(etContent, userName, etContent) ? "" : etNewFact.getText().toString());
+                    etNewFact.setText(createFact(etContent, userName) ? "" : etContent);
                 }
                 ((Animatable) fab.getDrawable()).start();
                 showHideKeyboard(visible, MainActivity.this, etNewFact);
@@ -202,9 +202,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Method to write new "facts" to the DB
-    public Boolean createFact(String content, String userName, @Nullable String resurl) {
+    public Boolean createFact(String content, String userName) {
         String timeNow = formatDateForDataBase();
-        Facts newFact = new Facts(content, userName, timeNow, resurl);
+        Facts newFact = new Facts(content, userName, timeNow);
         String pNewFactKey = mFactRef.push().getKey();
         UserPosts userPosts = new UserPosts(content, timeNow);
 
