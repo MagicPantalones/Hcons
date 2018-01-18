@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public FactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.fact_list_item, parent, false);
+                        .inflate(R.layout.fact_list_item_text, parent, false);
                 return new FactViewHolder(view);
             }
 
@@ -171,10 +172,11 @@ public class MainActivity extends AppCompatActivity {
                 TransitionManager.beginDelayedTransition(transitionOverlay, new TransitionSet()
                         .addTransition(new Slide(Gravity.START)));
                 visible = !visible;
+                String etContent = etNewFact.getText().toString();
                 etNewFact.setVisibility(visible ? View.VISIBLE : View.GONE);
                 fab.setImageResource(visible ? R.drawable.avd_anim_dark : R.drawable.avd_anim_dark_reverse);
                 if (!etNewFact.getText().toString().equals("") && (!visible)) {
-                    etNewFact.setText(createFact(etNewFact.getText().toString(), userName) ? "" : etNewFact.getText().toString());
+                    etNewFact.setText(createFact(etContent, userName, etContent) ? "" : etNewFact.getText().toString());
                 }
                 ((Animatable) fab.getDrawable()).start();
                 showHideKeyboard(visible, MainActivity.this, etNewFact);
@@ -200,9 +202,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Method to write new "facts" to the DB
-    public Boolean createFact(String content, String userName) {
+    public Boolean createFact(String content, String userName, @Nullable String resurl) {
         String timeNow = formatDateForDataBase();
-        Facts newFact = new Facts(content, userName, timeNow);
+        Facts newFact = new Facts(content, userName, timeNow, resurl);
         String pNewFactKey = mFactRef.push().getKey();
         UserPosts userPosts = new UserPosts(content, timeNow);
 
@@ -232,6 +234,10 @@ public class MainActivity extends AppCompatActivity {
 
     //Gets called on click from the fragment class.
     void updateUsername(String newname){
+        if (userName.equals("testRobot")){
+            Toast.makeText(this, "Hello Robot ^^", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (TextUtils.isEmpty(newname) || newname.equals(eMail)){
             Toast.makeText(this, "Illegal username, try again", Toast.LENGTH_LONG).show();
             showChangeUsernameDialog();

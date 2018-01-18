@@ -6,8 +6,8 @@ package io.magicpants.hkonsapp;
  */
 
 public class UserPosts {
-    String fact;
-    String timestamp;
+    public String fact;
+    public String timestamp;
 
     public UserPosts(){}
 
