@@ -54,7 +54,4 @@ freeline.py
 freeline/
 freeline_project_description.json
 /build.gradle
-/app/build.gradle
-/gradle.properties
-/settings.gradle
-/gradle/wrapper/
+
