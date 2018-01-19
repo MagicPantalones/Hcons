@@ -6,7 +6,7 @@ android {
 
 
     defaultConfig {
-        applicationId "io.magicpants.test"
+        applicationId "com.example.yourapplicationname"
         minSdkVersion 22
         targetSdkVersion 27
         versionCode 1
@@ -24,7 +24,7 @@ android {
     productFlavors {
     }
     sourceSets {
-        main { java.srcDirs = ['src/main/java', 'src/main/java/io.magicpants.hkonsapp/utils'] }
+        main { java.srcDirs = ['src/main/java', 'src/main/java/com.exaple.yourapplicationname/utils'] }
     }
 }
 
