@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 27
     
 
 
     defaultConfig {
         applicationId "io.magicpants.test"
-        minSdkVersion 25
-        targetSdkVersion 26
+        minSdkVersion 22
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
 
