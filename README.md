@@ -15,7 +15,7 @@
       }
     }
     ```
-- Go to Firebase Authentication and set up _**only**_ Email as the sign-in method.
+- Go to Firebase Authentication and set up Email as the _**only**_ sign-in method.
   - You need to create user accounts manually for now. I have not implemented sign-up yet.
     I want to avoid unauthorized users until I write more secure rules, and test the database
     data scaling.
