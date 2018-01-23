@@ -1,6 +1,8 @@
 package io.magicpants.hkonsapp;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,7 +18,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 public class FactsFirebaseInstanceId extends FirebaseInstanceIdService {
     private static final String TAG = "FirebaseInstanceIdClass";
-    String uId;
+
 
     @Override
     public void onTokenRefresh() {
@@ -24,13 +26,22 @@ public class FactsFirebaseInstanceId extends FirebaseInstanceIdService {
         Log.d(TAG, "Refreshed Token: " + refreshedToken);
         sendNewToken(refreshedToken);
     }
-    private void sendNewToken(String token){
+    private static void sendNewToken(String token){
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser mUser = mAuth.getCurrentUser();
         DatabaseReference mDbref = FirebaseDatabase.getInstance().getReference("users");
+        String uId;
         if (mUser != null) {
             uId = mUser.getUid();
             mDbref.child(uId).child("notificationtoken").setValue(token);
         }
+    }
+
+    public static void registerCurrentNotificationToken(Context context){
+        if (FirebaseInstanceId.getInstance().getToken() != null){
+            sendNewToken(FirebaseInstanceId.getInstance().getToken());
+            return;
+        }
+        Log.d(TAG, "No notification token on user");
     }
 }

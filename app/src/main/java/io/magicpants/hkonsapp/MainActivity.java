@@ -1,13 +1,10 @@
 package io.magicpants.hkonsapp;
 
-import android.app.Activity;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,7 +22,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -43,11 +39,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 
-
+import static io.magicpants.hkonsapp.FactsFirebaseInstanceId.registerCurrentNotificationToken;
 import static io.magicpants.hkonsapp.util.HconUtils.formatDateForDataBase;
 import static io.magicpants.hkonsapp.util.HconUtils.normalizeMetricDate;
+import static io.magicpants.hkonsapp.util.HconUtils.showHideKeyboard;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,39 +82,25 @@ public class MainActivity extends AppCompatActivity {
         mUserRef = FirebaseDatabase.getInstance().getReference("users");
         mAuth = FirebaseAuth.getInstance();
 
-
         visible = false;
         transitionOverlay = findViewById(R.id.transition_container);
         fab = transitionOverlay.findViewById(R.id.btn_new_fact);
         etNewFact = transitionOverlay.findViewById(R.id.et_new_fact);
-
-        fab.setImageResource(R.drawable.avd_anim_dark);
 
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(this, AuthenticationActivity.class));
             return;
         }
 
-        mUser = mAuth.getCurrentUser();
+        initializeUserVars();
 
-        userName = (mUser.getDisplayName() == null) ? mUser.getEmail() : mUser.getDisplayName();
-        eMail = mUser.getEmail();
-        profilePicture = mUser.getPhotoUrl();
-        uid = mUser.getUid();
-
-        mUserRef = mUserRef.child(uid);
-        //TODO temp function while i'm creating user accounts manually
-        if (userName.equals(eMail)){
-            Toast.makeText(this, "Username can't be same as Email, please change", Toast.LENGTH_LONG).show();
-            showChangeUsernameDialog();
-        }
-
-        Query query = mFactRef.orderByKey().limitToLast(100);
+        Query query = mFactRef.orderByKey().limitToLast(50);
 
         /* This creates the adapter, viewholder and populates the recycler view.
          */
         FirebaseRecyclerOptions<Facts> options = new FirebaseRecyclerOptions.Builder<Facts>()
                 .setQuery(query, Facts.class)
+                .setLifecycleOwner(this)
                 .build();
 
         mAdapter = new FirebaseRecyclerAdapter<Facts, FactViewHolder>(options) {
@@ -129,11 +113,28 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull FactViewHolder holder, int position, @NonNull Facts model) {
+            protected void onBindViewHolder(@NonNull final FactViewHolder holder, int position, @NonNull Facts model) {
+                String creator = model.getCreator();
+                DatabaseReference dbr = FirebaseDatabase.getInstance().getReference("users").child(creator);
 
+                if (creator.length() <= 15){
+                    holder.mCreatorView.setText(model.getCreator() + " ");
+                } else {
+                    dbr.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Users postUser = dataSnapshot.getValue(Users.class);
+                            holder.mCreatorView.setText(postUser.getUsername());
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.d(TAG, "single event listener: " + databaseError.getMessage());
+                        }
+                    });
+                }
                 holder.mFactsView.setText(model.getContent());
                 //TODO Make a custom textView that measures text after applying font or just another better way to stop custom fonts from being cut off
-                holder.mCreatorView.setText(model.getCreator() + " ");
                 holder.mTimestampView.setText(normalizeMetricDate(model.getTimestamp()) + " ");
             }
 
@@ -149,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
                 super.onError(error);
                 Log.d(TAG, "onError: " + error);
             }
-        };
 
+        };
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(false);
@@ -168,43 +169,30 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                String etContent = etNewFact.getText().toString();
 
                 TransitionManager.beginDelayedTransition(transitionOverlay, new TransitionSet()
                         .addTransition(new Slide(Gravity.START)));
+
                 visible = !visible;
-                String etContent = etNewFact.getText().toString();
+
                 etNewFact.setVisibility(visible ? View.VISIBLE : View.GONE);
                 fab.setImageResource(visible ? R.drawable.avd_anim_dark : R.drawable.avd_anim_dark_reverse);
+
                 if (!etNewFact.getText().toString().equals("") && (!visible)) {
-                    etNewFact.setText(createFact(etContent, userName) ? "" : etContent);
+                    etNewFact.setText(createFact(etContent) ? "" : etContent);
                 }
+
                 ((Animatable) fab.getDrawable()).start();
                 showHideKeyboard(visible, MainActivity.this, etNewFact);
             }
         });
     }
 
-    //TODO Implement lifecycle changes, local DB, savedinstancestate bundle, etc.
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mAdapter != null) {
-            mAdapter.startListening();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        if (mAdapter != null) {
-            mAdapter.stopListening();
-        }
-        super.onStop();
-    }
-
     //Method to write new "facts" to the DB
-    public Boolean createFact(String content, String userName) {
+    public Boolean createFact(String content) {
         String timeNow = formatDateForDataBase();
-        Facts newFact = new Facts(content, userName, timeNow);
+        Facts newFact = new Facts(content, uid, timeNow);
         String pNewFactKey = mFactRef.push().getKey();
         UserPosts userPosts = new UserPosts(content, timeNow);
 
@@ -212,18 +200,6 @@ public class MainActivity extends AppCompatActivity {
         mFactRef.child(pNewFactKey).setValue(newFact);
 
         return true;
-    }
-
-    //Util method for opening or hiding the soft input keyboard
-    public void showHideKeyboard(Boolean show, Context context, View v) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if ((show) && (v != null)) {
-            v.requestFocus();
-            imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
-        } else if ((!show) && v != null) {
-            v.clearFocus();
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-        }
     }
 
     //Shows the fragment to change usernames
@@ -253,10 +229,29 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     userName = mUser.getDisplayName();
                     mUserRef.child("username").setValue(userName);
+                    mAdapter.notifyDataSetChanged();
                     Toast.makeText(MainActivity.this, "Username added", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    //Method for assigning user variables
+    void initializeUserVars(){
+        mUser = mAuth.getCurrentUser();
+
+        userName = (mUser.getDisplayName() == null) ? mUser.getEmail() : mUser.getDisplayName();
+        eMail = mUser.getEmail();
+        profilePicture = mUser.getPhotoUrl();
+        uid = mUser.getUid();
+
+        mUserRef = mUserRef.child(uid);
+        //TODO temp function while i'm creating user accounts manually
+        if (userName.equals(eMail)){
+            Toast.makeText(this, "Username can't be same as Email, please change", Toast.LENGTH_LONG).show();
+            showChangeUsernameDialog();
+        }
+        registerCurrentNotificationToken(this);
     }
 
     //Initiates the top right option menu

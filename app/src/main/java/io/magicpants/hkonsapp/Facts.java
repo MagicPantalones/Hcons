@@ -1,11 +1,5 @@
 package io.magicpants.hkonsapp;
 
-import android.support.annotation.Nullable;
-
-import com.google.firebase.database.DatabaseReference;
-
-import java.text.SimpleDateFormat;
-
 /**
  * Parser for Firebase Database
  * Created by Erik on 18.12.2017.

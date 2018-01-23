@@ -17,8 +17,7 @@ public class Users {
     String getUsername(){return username;}
     void setMailAddress(String mailAddress){this.emailaddress = mailAddress;}
     String getMailAddress(){return emailaddress;}
-    void setNotificationToken(String notificationToken){this.notificationtoken = notificationToken;}
-    String getNotificationToken(){return notificationtoken;}
-
+    void setNotificationtoken(String notificationToken){this.notificationtoken = notificationToken;}
+    String getNotificationtoken(){return notificationtoken;}
 
 }

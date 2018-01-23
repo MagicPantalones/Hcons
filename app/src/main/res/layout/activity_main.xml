@@ -61,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:src="@drawable/avd_anim_dark"
             android:elevation="6dp"
             app:pressedTranslationZ="12dp" />
 
