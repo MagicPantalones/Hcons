@@ -9,29 +9,43 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingEnd="16dp"
-    android:paddingTop="8dp">
+    android:paddingTop="8dp"
+    tools:background="#212121">
 
     <View
         android:id="@+id/text_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:alpha="0.16"
+        android:layout_marginStart="8dp"
         android:background="@drawable/background_daily_facts"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/creator_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_postpicture"
-        app:layout_constraintBottom_toTopOf="@+id/creator_text" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <io.magics.circularviewmagics.CircularViewMagics
+        android:id="@+id/iv_updoot"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:contentDescription="@string/hello_world"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_postpicture"
-        android:layout_width="30dp"
+        android:layout_width="25dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="8dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/profile_picture_description"
-        android:scaleType="centerInside"
-        android:src="@drawable/logo_h_app_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:src="@drawable/holo_white_bell_follow_anim_two"
+        app:layout_constraintBottom_toBottomOf="@+id/creator_text"
+        app:layout_constraintStart_toStartOf="@+id/iv_updoot"
+        app:layout_constraintTop_toBottomOf="@+id/iv_updoot" />
+
 
     <TextView
         android:id="@+id/fact_text"
@@ -39,7 +53,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:scrollHorizontally="false"
-        android:textColor="@android:color/primary_text_dark"
+        android:textColor="@color/colorPrimaryLight"
         android:typeface="sans"
         app:layout_constraintBottom_toBottomOf="@+id/text_background"
         app:layout_constraintEnd_toEndOf="@+id/text_background"
@@ -55,7 +69,7 @@
         android:layout_marginStart="8dp"
         android:fontFamily="@font/acme"
         android:textAllCaps="false"
-        android:textColor="@android:color/primary_text_dark"
+        android:textColor="@color/colorPrimaryLight"
         android:textSize="12sp"
         android:textStyle="italic"
         app:layout_constraintStart_toStartOf="@+id/fact_text"
@@ -69,11 +83,12 @@
         android:fontFamily="@font/acme"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
-        android:textColor="@android:color/secondary_text_dark"
+        android:textColor="@color/colorPrimaryLight"
         android:textSize="12sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="@+id/creator_text"
         app:layout_constraintEnd_toEndOf="@+id/text_background"
         tools:text="31.12.17" />
+
 
 </android.support.constraint.ConstraintLayout>

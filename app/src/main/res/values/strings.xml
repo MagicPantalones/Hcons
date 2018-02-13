@@ -16,4 +16,7 @@
     <string name="log_out_btn">log out</string>
     <string name="change_name_btn">Change Username</string>
 
+    <string name="weekly_fact_author">Written By -</string>
+    <string name="total_factual_points_weekly">Updoots</string>
+
 </resources>

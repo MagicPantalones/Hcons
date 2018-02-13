@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#455A64</color>
     <color name="colorPrimaryLight">#CFD8DC</color>
     <color name="colorAccent">#cddc39</color>
-    <color name="colorTextPrimary">#212121</color>
+    <color name="textBoxBackground">#212121</color>
+    <color name="newTextBoxBackground">#414141</color>
 </resources>

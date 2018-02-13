@@ -1,11 +1,17 @@
 package io.magicpants.hkonsapp;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,11 +47,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-
 import static io.magicpants.hkonsapp.FactsFirebaseInstanceId.registerCurrentNotificationToken;
-import static io.magicpants.hkonsapp.util.HconUtils.formatDateForDataBase;
-import static io.magicpants.hkonsapp.util.HconUtils.normalizeMetricDate;
-import static io.magicpants.hkonsapp.util.HconUtils.showHideKeyboard;
+import static io.magicpants.hkonsapp.util.HconUtils.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -120,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 if (creator.length() <= 15){
                     holder.mCreatorView.setText(model.getCreator() + " ");
                 } else {
+                    //TODO get a list of usernames before and match the Uid to the username there. So it doesn't need to make this many single calls.
                     dbr.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -141,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildChanged(@NonNull ChangeEventType type, @NonNull DataSnapshot snapshot, int newIndex, int oldIndex) {
                 notifyDataSetChanged();
+                mAdapter.getItemCount();
                 mRecyclerView.scrollToPosition(newIndex);
                 super.onChildChanged(type, snapshot, newIndex, oldIndex);
             }

@@ -1,0 +1,52 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <group
+                android:name="group"
+                android:pivotX="12"
+                android:pivotY="12">
+                <path
+                    android:name="path"
+                    android:pathData="M 18.88 16.82 L 18.88 11 C 18.882 7.813 16.692 5.043 13.59 4.31 L 13.59 3.59 C 13.59 2.712 12.878 2 12 2 C 11.122 2 10.41 2.712 10.41 3.59 L 10.41 4.31 C 7.308 5.043 5.118 7.813 5.12 11 L 5.12 16.82 L 3 18.94 L 3 20 L 21 20 L 21 18.94 Z M 11 8 L 13 8 L 13 11 L 16 11 L 16 13 L 13 13 L 13 16 L 11 16 L 11 13 L 8 13 L 8 11 L 11 11 L 11 8"
+                    android:fillColor="#CFD8DC"
+                    android:strokeWidth="1"/>
+                <group android:name="group_1">
+                    <path
+                        android:name="path_1"
+                        android:pathData="M 12 23 C 13.105 23 14 22.105 14 21 L 10 21 C 10 22.105 10.895 23 12 23 Z"
+                        android:fillColor="#CFD8DC"/>
+                </group>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="group">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="rotation"
+                android:duration="600"
+                android:valueFrom="0"
+                android:valueTo="45"
+                android:valueType="floatType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="group_1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="translateX"
+                android:startOffset="100"
+                android:duration="500"
+                android:valueFrom="0"
+                android:valueTo="5"
+                android:valueType="floatType"
+                android:interpolator="@android:anim/bounce_interpolator"/>
+        </aapt:attr>
+    </target>
+</animated-vector>

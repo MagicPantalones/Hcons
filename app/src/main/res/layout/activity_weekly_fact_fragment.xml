@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/textBoxBackground">
+
+    <io.magics.circularviewmagics.CircularViewMagics
+        android:id="@+id/weekly_fact_header"
+        android:layout_width="180dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        app:viewShape="Rectangle"
+        app:cornerRadius="5dp"
+        app:outerRingEnabled="true"
+        app:outerRingColor="@color/colorPrimaryLight"
+        app:outerRingStroke="0.9dp"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/weekly_fact_header_description"
+        android:scaleType="center"
+        android:src="@drawable/weekly_fact_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/text_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.33"
+        app:layout_constraintTop_toTopOf="@+id/weekly_fact_header"
+        app:layout_constraintBottom_toBottomOf="@+id/weekly_fact_header"
+        />
+
+    <TextView
+        android:id="@+id/tv_weekly_author_static"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/acme"
+        android:text="@string/weekly_fact_author"
+        android:textColor="@color/colorPrimaryLight"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/text_guideline"
+        app:layout_constraintStart_toEndOf="@+id/weekly_fact_header"
+        app:layout_constraintTop_toTopOf="@+id/weekly_fact_header" />
+
+    <TextView
+        android:id="@+id/tv_weekly_author_dynamic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/acme"
+        android:textColor="@color/colorPrimaryLight"
+        app:layout_constraintStart_toEndOf="@+id/tv_weekly_author_static"
+        app:layout_constraintTop_toTopOf="@+id/tv_weekly_author_static"
+        tools:text="Magics!" />
+
+    <TextView
+        android:id="@+id/tv_weekly_points_static"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/acme"
+        android:text="@string/total_factual_points_weekly"
+        android:textColor="@color/colorPrimaryLight"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_weekly_fact"
+        app:layout_constraintStart_toEndOf="@+id/tv_weekly_points_dynamic"
+        app:layout_constraintTop_toTopOf="@+id/text_guideline" />
+
+    <TextView
+        android:id="@+id/tv_weekly_points_dynamic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/acme"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimaryLight"
+        app:layout_constraintStart_toEndOf="@+id/weekly_fact_header"
+        app:layout_constraintTop_toTopOf="@+id/tv_weekly_points_static"
+        tools:text="19" />
+
+    <TextView
+        android:id="@+id/tv_weekly_fact"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/colorPrimaryLight"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:typeface="sans"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/weekly_fact_header"
+        app:layout_constraintTop_toBottomOf="@+id/weekly_fact_header"
+        tools:text="Test string. This is the weekly fact. Written by Erik and handed out too the people" />
+
+
+</android.support.constraint.ConstraintLayout>
